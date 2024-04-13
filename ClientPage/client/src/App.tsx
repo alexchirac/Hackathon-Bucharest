@@ -7,13 +7,13 @@ export default function App() {
   const [name, setName] = useState("");
   const [response, setResponse] = useState("");
 
-  async function sayHello() {
+  async function logIn() {
     setResponse(await BackendService.hello(name));
   }
 
   return (
     <>
-      <div>
+      <div className="logo-container">
         <a href="https://genezio.com" target="_blank">
           <img
             src="https://raw.githubusercontent.com/Genez-io/graphics/main/svg/Logo_Genezio_White.svg"
@@ -30,7 +30,9 @@ export default function App() {
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
       </div>
-      <h1>Genezio + React = ❤️</h1>
+
+      <h1>Welcome to our app!</h1>
+      <h2>Enter your username below:</h2>
       <div className="card">
         <input
           type="text"
@@ -41,7 +43,7 @@ export default function App() {
         <br />
         <br />
 
-        <button onClick={() => sayHello()}>Say Hello</button>
+        <button onClick={() => logIn()}>Log in</button>
         <p className="read-the-docs">{response}</p>
       </div>
     </>

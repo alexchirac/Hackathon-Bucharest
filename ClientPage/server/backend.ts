@@ -35,6 +35,6 @@ export class BackendService {
       hour12: true,
     });
 
-    return `Hello ${name}! This response was served from ${ipLocation.city}, ${ipLocation.country} (${ipLocation.lat}, ${ipLocation.lon}) at ${formattedTime}`;
+    return `Hello ${name}! You logged in successfully at ${formattedTime}`;
   }
 }
