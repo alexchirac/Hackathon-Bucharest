@@ -13,40 +13,22 @@ export class ShoppingCartService {
     }
 
     async addItemToCart(cartId: string, productId: string, name: string) {
-        // const cartKey = `cart:${cartId}`;
         try {
             await this.client.set(productId, name);
+            return true;
         } catch {
             return false;
         }
-        // the rest of the implementation goes here
-        return true;
+
     }
 
     async getCartContents(cartId: string): Promise<string | null> {
-        // const cartKey = `${cartId}`;
         var cartContents;
         try {
             cartContents = await this.client.get(cartId);
+            return cartContents ?? null;
         } catch (error) {
             return null;
-        }// this.client.keys
-
-        // the rest of the implementation goes here
-        // if (!cartItemsKeys || cartItemsKeys.length === 0) {
-        //     return null; // If no items found, return null
-        // }
-
-        // var cartContents;
-
-        // for (const cartItemKey of cartItemsKeys) {
-        //     // const productId = cartItemKey.split(':').pop(); // Extract productId from key
-        //     // const quantity = await this.client.get(cartItemKey);
-        //     // if (quantity != null)
-        //     //     cartContents.set(productId, parseInt(quantity)); // Convert quantity to number
-        //     cartContents = cartItemKey.split(':').at(2);
-        // }
-
-        return cartContents ?? null;
+        }
     }
 }
