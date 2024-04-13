@@ -1,15 +1,48 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
-import { BackendService } from "@genezio-sdk/HackstreetBoys";
+import { ShoppingCartService } from "@genezio-sdk/HackstreetBoys";
 import './App.css'
 
 function App() {
   const [name, setName] = useState("");
+  const [surname, setSurname] = useState("");
   const [response, setResponse] = useState("");
 
-  async function sayHello() {
-    setResponse(await BackendService.hello(name));
+  async function addItem() {
+    await ShoppingCartService.addItemToCart("morcov", name, surname);
   }
+
+  async function sayHello() {
+    // setResponse(await BackendService.hello(name));
+    try {
+      setResponse(await ShoppingCartService.getCartContents("morcov"));
+    } catch {
+      console.error("Eroare");
+    }
+  }
+
+  useEffect(() => {
+    // Function to fetch cart contents and update state
+    async function fetchAndSetCartContents() {
+      try {
+        const cartContents = await ShoppingCartService.getCartContents("mama");
+        setResponse(cartContents || "No items in cart"); // Set response state or a default message if no items found
+      } catch (error) {
+        console.error('Error fetching cart contents:', error);
+        setResponse("Error fetching cart contents");
+      }
+    }
+
+    // Fetch cart contents when the component mounts
+    fetchAndSetCartContents();
+
+    // Update cart contents every 5 seconds
+    const intervalId = setInterval(fetchAndSetCartContents, 10000);
+
+    // Clear interval when the component unmounts
+    return () => clearInterval(intervalId);
+  }, []); // Empty dependency array means this effect runs only once on mount
+
 
   return (
     <>
@@ -38,9 +71,15 @@ function App() {
           onChange={(e) => setName(e.target.value)}
           placeholder="Enter your name"
         />
+        <input
+          type="text"
+          className="input-box"
+          onChange={(e) => setSurname(e.target.value)}
+          placeholder="Enter your surname"
+        />
         <br />
         <br />
-
+        <button onClick={() => addItem()}>AddItem</button>
         <button onClick={() => sayHello()}>Say Hello</button>
         <p className="read-the-docs">{response}</p>
       </div>
