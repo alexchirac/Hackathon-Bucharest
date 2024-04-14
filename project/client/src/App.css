@@ -11,23 +11,27 @@
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
 @media (prefers-color-scheme: dark) {
   .dark {
-    display: none; /* Hide light logo in light mode */
+    display: none;
+    /* Hide light logo in light mode */
   }
 }
 
 
 @media (prefers-color-scheme: light) {
   .light {
-    display: none; /* Hide dark logo in dark mode */
+    display: none;
+    /* Hide dark logo in dark mode */
   }
 }
 
@@ -35,6 +39,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
