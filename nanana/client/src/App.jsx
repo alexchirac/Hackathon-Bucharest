@@ -10,7 +10,8 @@ function App() {
   async function logIn() {
     try {
       const newResponse = await BackendService.hello(name);
-      setResponse(response);
+      await BackendService.addUser(name);
+      setResponse(newResponse);
     } catch {
       console.error("Eroare");
     }

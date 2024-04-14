@@ -4,52 +4,52 @@ import Redis from "ioredis";
 @GenezioDeploy()
 export class UserService {
     client: Redis;
-    noOfUsers: number;
+    prevNoOfUsers: number;
     constructor() {
         if (!process.env.UPSTASH_REDIS_URL) {
             throw new Error("UPSTASH_REDIS_URL is not set in the `.env` file.");
         }
         this.client = new Redis(process.env.UPSTASH_REDIS_URL);
-        this.noOfUsers = 0;
+        this.prevNoOfUsers = 0;
         console.log(process.env.UPSTASH_REDIS_URL);
     }
 
-    getNoOfUsers() {
-        return this.noOfUsers;
-    }
-
-    async addMessage(username: string) {
+    async addNotification(string: string) {
         try {
-            const userKey = `User:${this.noOfUsers}`;
-            await this.client.set(userKey, username);
-            this.noOfUsers++;
-            console.log(this.noOfUsers);
+            var noOfNotifications = await this.client.get("noOfNotifications");
+            if (noOfNotifications == null) {
+                noOfNotifications = "0";
+            }
+            const notifKey = `Notification:${noOfNotifications}`;
+            await this.client.set(notifKey, string);
+            this.client.set("noOfUsers", parseInt(noOfNotifications) + 1)
             return true;
         } catch {
             return false;
         }
-
     }
 
-    async getMessages(): Promise<string[] | null> {
-        // var cartContents;
+    async getMessages(): Promise<string[]> {
+        const sortedContents: string[] = [];
         try {
-            const cartContents = await this.client.keys('User:*');
-            const sortedContents = cartContents
-                .map(item => item.split(":"))
-                .sort((a, b) => parseInt(a[1], 10) - parseInt(b[1]))
-                .map(item => item.join(":"))
-                .map(async item => {
-                    const value = await this.client.get(item);
-                    if (value === null) {
-                        throw new Error(`Value for key '${item}' is missing or invalid`);
-                    }
-                    return value;
-                });
+            var noOfUsers = await this.client.get("noOfUsers");
+            if (noOfUsers == null) {
+                noOfUsers = "0";
+            }
 
-            return await Promise.all(sortedContents);
+            for (var i = this.prevNoOfUsers; i < parseInt(noOfUsers); i++) {
+                const user = await this.client.get(`User:${i}`);
+                if (user !== null)
+                    sortedContents.push(user);
+                else
+                    throw new Error('No user found');
+            }
+            this.prevNoOfUsers = parseInt(noOfUsers);
+            return sortedContents;
+
+            // return await Promise.all(sortedContents);
         } catch (error) {
-            return null;
+            return [];
         }
     }
 }

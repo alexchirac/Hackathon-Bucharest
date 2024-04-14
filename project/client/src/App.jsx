@@ -9,15 +9,15 @@ function App() {
   const [response, setResponse] = useState([]);
   // const [userId, setUserId] = useState(ShoppingCartService.getNoOfUsers());
 
-  async function addUser() {
-    await UserService.addMessage(name);
-    // setUserId(currentUserId => currentUserId + 1);
-    // console.log(userId);
-  }
+  // async function addUser() {
+  //   await UserService.addMessage(name);
+  //   // setUserId(currentUserId => currentUserId + 1);
+  //   // console.log(userId);
+  // }
 
   async function updateUsers() {
     try {
-      const rez = await UserService.getMessages("User");
+      const rez = response.concat(await UserService.getMessages("User"));
       setResponse(rez);
     } catch {
       console.error("Eroare");
@@ -83,7 +83,7 @@ function App() {
         /> */}
           <br />
           <br />
-          <button onClick={() => addUser()}>AddItem</button>
+          {/* <button onClick={() => addUser()}>AddItem</button> */}
           <button onClick={() => updateUsers()}>Say Hello</button>
           <h3>Added users are:</h3>
           {/* <p className="read-the-docs">{response}</p> */}
