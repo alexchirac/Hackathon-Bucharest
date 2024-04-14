@@ -38,15 +38,18 @@ export class BackendService {
 
   async addUser(username: string) {
     try {
-      var noOfUsers = await this.client.get("noOfUsers");
+      console.log(username)
+      let noOfUsers = await this.client.get("noOfUsers");
       if (noOfUsers == null) {
         noOfUsers = "0";
       }
+      console.log(noOfUsers)
       const userKey = `User:${noOfUsers}`;
       await this.client.set(userKey, username);
       this.client.set("noOfUsers", parseInt(noOfUsers) + 1)
       return true;
-    } catch {
+    } catch (error) {
+      console.log(error)
       return false;
     }
   }

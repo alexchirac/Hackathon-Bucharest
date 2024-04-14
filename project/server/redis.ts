@@ -30,6 +30,7 @@ export class UserService {
     }
 
     async getMessages(): Promise<string[]> {
+        console.log("s-a apelat")
         const sortedContents: string[] = [];
         try {
             var noOfUsers = await this.client.get("noOfUsers");
@@ -45,9 +46,9 @@ export class UserService {
                     throw new Error('No user found');
             }
             this.prevNoOfUsers = parseInt(noOfUsers);
+            console.log(sortedContents)
             return sortedContents;
 
-            // return await Promise.all(sortedContents);
         } catch (error) {
             return [];
         }

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
+import qrCode from './assets/qr-code.png'
 import { UserService } from "@genezio-sdk/HackstreetBoys";
 import './App.css'
 
@@ -7,6 +8,7 @@ function App() {
   const [name, setName] = useState("");
   // const [surname, setSurname] = useState("");
   const [response, setResponse] = useState([]);
+  const [pageName, setPage] = useState("home");
   // const [userId, setUserId] = useState(ShoppingCartService.getNoOfUsers());
 
   // async function addUser() {
@@ -14,10 +16,17 @@ function App() {
   //   // setUserId(currentUserId => currentUserId + 1);
   //   // console.log(userId);
   // }
+  function changeToOther() {
+    setPage("other");
+  }
+
+  function changeToHome() {
+    setPage("home");
+  }
 
   async function updateUsers() {
     try {
-      const rez = response.concat(await UserService.getMessages("User"));
+      const rez = response.concat(await UserService.getMessages());
       setResponse(rez);
     } catch {
       console.error("Eroare");
@@ -46,59 +55,70 @@ function App() {
   //   return () => clearInterval(intervalId);
   // }, []); // Empty dependency array means this effect runs only once on mount
 
-
-  return (
-    <>
-      <div className='background'>
+  if (pageName === "home")
+    return (
+      <>
         <div>
-          <a href="https://genezio.com" target="_blank">
-            <img
-              src="https://raw.githubusercontent.com/Genez-io/graphics/main/svg/Logo_Genezio_White.svg"
-              className="logo genezio light"
-              alt="Genezio Logo"
-            />
-            <img
-              src="https://raw.githubusercontent.com/Genez-io/graphics/main/svg/Logo_Genezio_Black.svg"
-              className="logo genezio dark"
-              alt="Genezio Logo"
-            />
-          </a>
-          <a href="https://react.dev" target="_blank">
-            <img src={reactLogo} className="logo react" alt="React logo" />
-          </a>
+          <img src={qrCode} className='qr-code' />
         </div>
-        <h1>Genezio + React = ❤️</h1>
-        <div className="card">
-          <input
-            type="text"
-            className="input-box"
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Enter your name"
-          />
-          {/* <input
+        <div className='background'>
+          <div>
+            <a href="https://genezio.com" target="_blank">
+              <img
+                src="https://raw.githubusercontent.com/Genez-io/graphics/main/svg/Logo_Genezio_White.svg"
+                className="logo genezio light"
+                alt="Genezio Logo"
+              />
+              <img
+                src="https://raw.githubusercontent.com/Genez-io/graphics/main/svg/Logo_Genezio_Black.svg"
+                className="logo genezio dark"
+                alt="Genezio Logo"
+              />
+            </a>
+            <a href="https://react.dev" target="_blank">
+              <img src={reactLogo} className="logo react" alt="React logo" />
+            </a>
+          </div>
+          <h1>Genezio + React = ❤️</h1>
+          <div className="card">
+            {/* <input
+              type="text"
+              className="input-box"
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Enter your name"
+            />
+            <button onClick={() => changeToOther()}>Change to other</button> */}
+            {/* <input
           type="text"
           className="input-box"
           onChange={(e) => setSurname(e.target.value)}
           placeholder="Enter your surname"
         /> */}
-          <br />
-          <br />
-          {/* <button onClick={() => addUser()}>AddItem</button> */}
-          <button onClick={() => updateUsers()}>Say Hello</button>
-          <h3>Added users are:</h3>
-          {/* <p className="read-the-docs">{response}</p> */}
-          <div>{response.map((element, i) => (
-            <div>
-              <button>
-                {element}
-              </button>
-              <br />
-            </div>
-          ))}</div>
+            <br />
+            <br />
+            {/* <button onClick={() => addUser()}>AddItem</button> */}
+            <button onClick={() => updateUsers()}>Show Users</button>
+            <h3>Added users are:</h3>
+            {/* <p className="read-the-docs">{response}</p> */}
+            <div>{response.map((element, i) => (
+              <div>
+                <button>
+                  {element}
+                </button>
+                <br />
+              </div>
+            ))}</div>
+          </div>
         </div>
-      </div>
-    </>
-  );
+      </>
+    );
+  else
+    return (
+      <>
+        <h3>Asta e alta pagina</h3>
+        <button onClick={() => changeToHome()}>Change to Home</button>
+      </>
+    );
 }
 
 export default App

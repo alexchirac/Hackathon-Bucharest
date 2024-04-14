@@ -1,28 +1,35 @@
 import { useState } from 'react';
 
+import { BackendService } from "@genezio-sdk/ClientPage"
+
 interface LoginPageProps {
   onLogin: (username: string) => void;
 }
 
-const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
+export const LoginPage: React.FC<LoginPageProps> = () => {
   const [username, setUsername] = useState('');
 
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    onLogin(username);
-  };
+
+  async function handleSubmit() {
+    try {
+      // const newResponse = await BackendService.hello(username);
+      const response = await BackendService.addUser(username);
+      console.log(response);
+      // changeToPage();
+    } catch {
+      console.error("Eroare");
+    }
+  }
 
   return (
     <div className="login-page">
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Enter your username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <button type="submit">Login</button>
-      </form>
+      <input
+        type="text"
+        placeholder="Enter your username"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+      />
+      <button type="submit" onClick={handleSubmit}>Login</button>
     </div>
   );
 };
